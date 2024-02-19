@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+   name: webservice
+   namespace: fom
+spec:
+   replicas: 2
+   template:
+      spec:
+         containers:
+            - name: webservice
+              image: fom/webservice-fom:latest
+              ports:
+              - containerPorts: 8080
+
+# kubectl apply -f webservice-k8s.yaml
+# kubectl get deployments --namespace ???
+# kubectl get services --namespace ??? 
+# kubectl delete -f webservice-k8s.yaml

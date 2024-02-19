@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  webservice:
+    image: fom/webservice-fom:latest
+    ports:
+      - "8080:8080"
+    deploy:
+      mode: global
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints: [node.role == worker]
+
+# docker stack deploy -c webservice-docker.yaml webservice-demo
+# docker service ls
+# docker stack rm demo
