@@ -1,19 +1,42 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-   name: webservice
-   namespace: fom
+  name: fom-web-server
+  namespace: fom
 spec:
-   replicas: 2
-   template:
-      spec:
-         containers:
-            - name: webservice
-              image: fom/webservice-fom:latest
-              ports:
-              - containerPorts: 8080
+  replicas: 2
+  selector:
+    matchLabels:
+      app: fom-webservice
+  template:
+    metadata:
+      labels:
+        app: fom-webservice
+    spec:
+      containers:
+      - name: fom-webservice
+        image: deluckii/fom:latest
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fom-service
+  labels:
+    app: fom-webservice
+  namespace: fom
+spec:
+  selector:
+    app: fom-webservice
+  ports:
+    - name: fom-webservice-service
+      port: 8080
+      targetPort: 8080
+  type: NodePort
+
 
 # kubectl apply -f webservice-k8s.yaml
-# kubectl get deployments --namespace ???
-# kubectl get services --namespace ??? 
+# kubectl get deployments -n fom
+# kubectl get services -n fom
 # kubectl delete -f webservice-k8s.yaml
